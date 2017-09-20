@@ -33,6 +33,16 @@ from flask import make_response
 app = Flask(__name__)
 
 
+class switch(object):
+    value = None
+    def __new__(class_, value):
+        class_.value = value
+        return True
+
+def case(*args):
+    return any((arg == switch.value for arg in args))
+
+
 @app.route('/webhook', methods=['POST'])
 def webhook():
     req = request.get_json(silent=True, force=True)
@@ -52,17 +62,19 @@ def webhook():
 def processRequest(req):
     if req.get("result").get("action") != "yahooWeatherForecast":
         return {}
-    baseurl = "https://query.yahooapis.com/v1/public/yql?"
-    yql_query = makeYqlQuery(req)
-    if yql_query is None:
-        return {}
-    yql_url = baseurl + urlencode({'q': yql_query}) + "&format=json"
-    result = urlopen(yql_url).read()
-    data = json.loads(result)
-    res = makeWebhookResult(data)
+    #baseurl = "https://query.yahooapis.com/v1/public/yql?"
+    #yql_query = makeYqlQuery(req)
+    #if yql_query is None:
+     #   return {}
+    definition = define(req) 
+
+    #yql_url = baseurl + urlencode({'q': yql_query}) + "&format=json"
+    #result = urlopen(yql_url).read()
+    #data = json.loads(result)
+    res = makeWebhookResult(define)
     return res
 
-
+'''
 def makeYqlQuery(req):
     result = req.get("result")
     parameters = result.get("parameters")
@@ -71,9 +83,26 @@ def makeYqlQuery(req):
         return None
 
     return "select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='" + city + "')"
+'''
 
+def define(req):
+    result = req.get("result")
+    parameters = result.get("parameters")
+    n = parameters.get("define")
+    if n is None:
+        return None
+
+    if n == "SEO":
+        return "definition of SEO"
+    elif n == "Hotel":
+        return "definition of Hotel"
+    else:
+        return "Couldn't find it."
+
+    return{}
 
 def makeWebhookResult(data):
+    '''
     query = data.get('query')
     if query is None:
         return {}
@@ -97,9 +126,9 @@ def makeWebhookResult(data):
         return {}
 
     # print(json.dumps(item, indent=4))
+    '''
 
-    speech = "Today in " + location.get('city') + ": " + condition.get('text') + \
-             ", the temperature is " + condition.get('temp') + " " + units.get('temperature')
+    speech = data
 
     print("Response:")
     print(speech)
