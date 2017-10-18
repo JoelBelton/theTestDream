@@ -299,7 +299,7 @@ def define(req):
     elif n == "Loyalty Programme":
         return "Loyalty Programmes are rewards programme for those that stay at a hotel regularly. Rewards can vary, but typically include free stays, dining vouchers, upgrades etc."
     else:
-        return "Couldn't find it."
+        return "Oops Sorry! We don't have that one yet, But we are constantly updating so come back soon!"
 
     return{}
 
