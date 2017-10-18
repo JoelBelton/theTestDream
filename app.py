@@ -94,8 +94,6 @@ def define(req):
 
     if n == "SEO":
         return "definition of SEO"
-    elif n == "Hotel":
-        return "definition"
     elif n == "ABPCO":
         return "ABPCO is the Association of British Professional Conference Organisers"
     elif n == "ABTA":
