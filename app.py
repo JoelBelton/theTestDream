@@ -25,8 +25,6 @@ from urllib.error import HTTPError
 import json
 import os
 
-import requests
-
 from flask import Flask
 from flask import request
 from flask import make_response
@@ -83,7 +81,6 @@ def makeYqlQuery(req):
     city = parameters.get("geo-city")
     if city is None:
         return None
-
     return "select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='" + city + "')"
 '''
 
@@ -300,8 +297,6 @@ def define(req):
     elif n == "Loyalty Programme":
         return "Loyalty Programmes are rewards programme for those that stay at a hotel regularly. Rewards can vary, but typically include free stays, dining vouchers, upgrades etc."
     else:
-        url = 'https://hooks.zapier.com/hooks/catch/2442545/ifoavb/'
-        requests.post(url, json={'intent': 'Define', 'userEntry': n})
         return "Oops Sorry! We don't have that one yet, But we are constantly updating so come back soon!"
 
     return{}
@@ -311,25 +306,20 @@ def makeWebhookResult(data):
     query = data.get('query')
     if query is None:
         return {}
-
     result = query.get('results')
     if result is None:
         return {}
-
     channel = result.get('channel')
     if channel is None:
         return {}
-
     item = channel.get('item')
     location = channel.get('location')
     units = channel.get('units')
     if (location is None) or (item is None) or (units is None):
         return {}
-
     condition = item.get('condition')
     if condition is None:
         return {}
-
     # print(json.dumps(item, indent=4))
     '''
 
